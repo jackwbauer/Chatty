@@ -7,6 +7,11 @@ class MessageList extends Component {
         this.state = { messages: props.messages };
     }
 
+    addMessage(message) {
+        messages.push(message);
+        this.setState ({ messages })
+    }
+
     render() {
         const messageList = this.state.messages.map(message => {
             return <Message message={message} />
