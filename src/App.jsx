@@ -7,38 +7,41 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {},
-      messages: messagesData
+      currentUser: { name: 'Jack' },
+      messages: [],
+      socket: {}
     }
-    this.addMessage = this.addMessage.bind(this);
+    this.newMessage = this.newMessage.bind(this);
   }
 
-  addMessage(event) {
-    if(event.key === "Enter") {
+  newMessage(event) {
+    if (event.key === "Enter") {
       const username = event.currentTarget.elements[0].value;
       const messageInput = event.currentTarget.elements[1].value;
       const newMessage = {
         type: messageInput ? "incomingMessage" : "incomingNotification",
         username: username,
         content: messageInput,
-        id: this.state.messages.length + 1
+        id: ''
       }
-        const messages = this.state.messages.concat(newMessage);
-        this.setState ({ messages });
+      this.state.socket.send(JSON.stringify(newMessage));
+      console.log('Message sent to server');
+      // const messages = this.state.messages.concat(newMessage);
+      // this.setState({ messages });
     }
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = { type: "incomingMessage", username: "Michelle", content: "Hello there!", id: 200 };
+    const socket = new WebSocket('ws://localhost:3001')
+    socket.onmessage = (event) => {
+      const newMessage = JSON.parse(event.data);
+      // console.log(newMessage);
       const messages = this.state.messages.concat(newMessage);
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({ messages: messages })
-    }, 3000);
+      this.setState({ messages });
+    }
+    this.setState({ socket });
+    console.log('Connected to server');
   }
 
   render() {
@@ -48,7 +51,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage}/>
+        <ChatBar currentUser={this.state.currentUser} newMessage={this.newMessage} />
       </div>
     );
   }
