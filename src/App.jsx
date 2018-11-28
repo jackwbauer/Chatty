@@ -17,17 +17,28 @@ class App extends Component {
   newMessage(event) {
     if (event.key === "Enter") {
       const username = event.currentTarget.elements[0].value;
+      console.log('here');
       const messageInput = event.currentTarget.elements[1].value;
-      const newMessage = {
-        type: messageInput ? "incomingMessage" : "incomingNotification",
-        username: username,
-        content: messageInput,
-        id: ''
+      let newMessage = {};
+      if(this.state.currentUser.name !== username) {
+        newMessage = {
+          type: "incomingNotification",
+          username: username,
+          content: `${this.state.currentUser.name} changed their name to ${username}`
+        }
+        this.state.socket.send(JSON.stringify(newMessage));
+        this.setState({ currentUser: { name: username }});
+        console.log('Message sent to server');
       }
-      this.state.socket.send(JSON.stringify(newMessage));
-      console.log('Message sent to server');
-      // const messages = this.state.messages.concat(newMessage);
-      // this.setState({ messages });
+      if(messageInput) {
+        newMessage = {
+          type: "incomingMessage",
+          username: username,
+          content: messageInput
+        }
+        this.state.socket.send(JSON.stringify(newMessage));
+        console.log('Message sent to server');
+      }
     }
   }
 

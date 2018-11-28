@@ -25,7 +25,6 @@ wss.on('connection', (ws) => {
     ws.on('message', (messageJSON) => {
         const message = JSON.parse(messageJSON);
         message.id = uuid();
-        console.log(`User ${message.username} says ${message.content} with ID ${message.id}`);
         wss.clients.forEach(client => {
             if(client.readyState === WebSocket.OPEN) {
                 console.log('Sending message to all clients');
