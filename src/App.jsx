@@ -8,7 +8,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: { name: 'Jack' },
+      currentUser: { name: 'Jack', color: '' },
       messages: [],
       socket: {},
       userCount: 0
@@ -19,10 +19,9 @@ class App extends Component {
   newMessage(event) {
     if (event.key === "Enter") {
       const username = event.currentTarget.elements[0].value;
-      console.log('here');
       const messageInput = event.currentTarget.elements[1].value;
       event.currentTarget.elements[1].value = '';
-      let newMessage = {};
+      let newMessage = {};  
       if (this.state.currentUser.name !== username) {
         newMessage = {
           type: "incomingNotification",
@@ -37,7 +36,8 @@ class App extends Component {
         newMessage = {
           type: "incomingMessage",
           username: username,
-          content: messageInput
+          content: messageInput,
+          color: this.state.currentUser.color
         }
         this.state.socket.send(JSON.stringify(newMessage));
         console.log('Message sent to server');
@@ -50,8 +50,8 @@ class App extends Component {
     const socket = new WebSocket('ws://localhost:3001')
     socket.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      const { userCount, message } = response;
-      this.setState({ userCount });
+      const { userCount, color, message } = response;
+      this.setState({ userCount, currentUser: { name: this.state.currentUser.name, color } });
       if (message) {
         const messages = this.state.messages.concat(message);
         this.setState({ messages });

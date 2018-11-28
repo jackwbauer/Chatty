@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 
 class Message extends Component {
+    usernameColor = {
+        color: this.props.color ? this.props.color : '#000000'
+    };
+
     render() {
         const { type, username, content } = this.props.message;
         if (type === "incomingMessage") {
             return (
                 <div className="message">
-                    <span className="message-username">{username}</span>
+                    <span style={this.usernameColor} className="message-username">{username}</span>
                     <span className="message-content">{content}</span>
                 </div>
             )

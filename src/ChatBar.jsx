@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 class ChatBar extends Component {
+
     render() {
         return (
             <form className="chatbar" onKeyPress={this.props.newMessage}>

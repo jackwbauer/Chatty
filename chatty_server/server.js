@@ -17,25 +17,31 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+function assignColor() {
+    const colors = ['#ff0000', '#0000ff', '#008000', '#000000']; //red, blue, green, black
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    return color;
+}
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    const connectedResponse = { userCount: wss.clients.size };
+    const connectedResponse = { userCount: wss.clients.size, color: assignColor() };
     ws.send(JSON.stringify(connectedResponse));
     ws.on('message', (messageJSON) => {
-        const message = JSON.parse(messageJSON);
+        const { message, color } = JSON.parse(messageJSON);
         message.id = uuid();
         wss.clients.forEach(client => {
-            if(client.readyState === WebSocket.OPEN) {
-                const response = { userCount: wss.clients.size, message };
+            if (client.readyState === WebSocket.OPEN) {
+                const response = { userCount: wss.clients.size, message, color };
                 console.log('Sending message to all clients');
                 client.send(JSON.stringify(response));
             }
         })
     });
-    
+
     // Set up a callback for when a client closes the socket. This usually means they closed their browser.
     ws.on('close', () => console.log('Client disconnected'));
 });
