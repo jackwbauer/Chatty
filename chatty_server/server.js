@@ -22,13 +22,16 @@ const wss = new SocketServer({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    const connectedResponse = { userCount: wss.clients.size };
+    ws.send(JSON.stringify(connectedResponse));
     ws.on('message', (messageJSON) => {
         const message = JSON.parse(messageJSON);
         message.id = uuid();
         wss.clients.forEach(client => {
             if(client.readyState === WebSocket.OPEN) {
+                const response = { userCount: wss.clients.size, message };
                 console.log('Sending message to all clients');
-                client.send(JSON.stringify(message));
+                client.send(JSON.stringify(response));
             }
         })
     });

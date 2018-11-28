@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
+import NavBar from './NavBar.jsx';
 import messagesData from '../data.json';
 
 class App extends Component {
@@ -9,7 +10,8 @@ class App extends Component {
     this.state = {
       currentUser: { name: 'Jack' },
       messages: [],
-      socket: {}
+      socket: {},
+      userCount: 0
     }
     this.newMessage = this.newMessage.bind(this);
   }
@@ -19,18 +21,19 @@ class App extends Component {
       const username = event.currentTarget.elements[0].value;
       console.log('here');
       const messageInput = event.currentTarget.elements[1].value;
+      event.currentTarget.elements[1].value = '';
       let newMessage = {};
-      if(this.state.currentUser.name !== username) {
+      if (this.state.currentUser.name !== username) {
         newMessage = {
           type: "incomingNotification",
           username: username,
           content: `${this.state.currentUser.name} changed their name to ${username}`
         }
         this.state.socket.send(JSON.stringify(newMessage));
-        this.setState({ currentUser: { name: username }});
+        this.setState({ currentUser: { name: username } });
         console.log('Message sent to server');
       }
-      if(messageInput) {
+      if (messageInput) {
         newMessage = {
           type: "incomingMessage",
           username: username,
@@ -46,10 +49,13 @@ class App extends Component {
     console.log("componentDidMount <App />");
     const socket = new WebSocket('ws://localhost:3001')
     socket.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      // console.log(newMessage);
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({ messages });
+      const response = JSON.parse(event.data);
+      const { userCount, message } = response;
+      this.setState({ userCount });
+      if (message) {
+        const messages = this.state.messages.concat(message);
+        this.setState({ messages });
+      }
     }
     this.setState({ socket });
     console.log('Connected to server');
@@ -58,9 +64,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
+        <NavBar userCount={this.state.userCount} />
         <MessageList messages={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser} newMessage={this.newMessage} />
       </div>
