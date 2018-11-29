@@ -38,9 +38,9 @@ function imageCheck(content) {
             newContent.push({ type: 'text', content: content.substring(subStrStart, images[i].index) })
             newContent.push({ type: 'image', content: images[i].url });
         }
-        newContent.push({ type: 'text', content: content.substring(images[images.length - 1].index + images[images.length - 1].url.length )});
+        newContent.push({ type: 'text', content: content.substring(images[images.length - 1].index + images[images.length - 1].url.length) });
     } else {
-        newContent.push(content);
+        newContent.push({ type: 'text', content });
     }
     return newContent;
 }

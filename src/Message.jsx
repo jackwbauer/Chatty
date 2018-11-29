@@ -13,13 +13,14 @@ class Message extends Component {
     // break message into array to handle combintations of text and image urls
     imageCheck = (content) => {
         let newContent = [];
+        console.log('content:', content);
         content.forEach((piece) => {
-            switch(piece.type) {
+            switch (piece.type) {
                 case 'image':
-                    newContent.push(<div><img className='message-image' src={piece.content}/></div>);
+                    newContent.push(<div><img className='message-image' src={piece.content} /></div>);
                     break;
                 case 'text':
-                    default:
+                default:
                     newContent.push(piece.content);
                     break;
             }
@@ -29,8 +30,6 @@ class Message extends Component {
 
     render() {
         const { type, username, content } = this.props.message;
-        console.log('message', this.props.message);
-        console.log('content', content);
         const newContent = this.imageCheck(content);
         if (type === "incomingMessage") {
             return (
