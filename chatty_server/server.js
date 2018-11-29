@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 const SocketServer = require('ws').Server;
 const uuid = require('uuid/v4');
 
+
 // Set the port to 3001
 const PORT = 3001;
 
@@ -23,6 +24,27 @@ function assignColor() {
     return color;
 }
 
+function imageCheck(content) {
+    const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)/gi;
+    let newContent = [];
+    let images = [];
+    let imgUrl = [];
+    while ((imgUrl = imgRegex.exec(content)) !== null) {
+        images.push({ url: imgUrl[0], index: imgUrl.index })
+    }
+    if (images && images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+            const subStrStart = images[i - 1] ? images[i - 1].index + images[i - 1].url.length : 0;
+            newContent.push({ type: 'text', content: content.substring(subStrStart, images[i].index) })
+            newContent.push({ type: 'image', content: images[i].url });
+        }
+        newContent.push({ type: 'text', content: content.substring(images[images.length - 1].index + images[images.length - 1].url.length )});
+    } else {
+        newContent.push(content);
+    }
+    return newContent;
+}
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -33,6 +55,7 @@ wss.on('connection', (ws) => {
     ws.on('message', (messageJSON) => {
         const message = JSON.parse(messageJSON);
         message.id = uuid();
+        message.content = imageCheck(message.content);
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
                 const response = { userCount: wss.clients.size, message };

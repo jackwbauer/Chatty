@@ -51,6 +51,7 @@ class App extends Component {
     socket.onmessage = (event) => {
       const response = JSON.parse(event.data);
       const { userCount, color, message } = response;
+      console.log(message);
       if(color) {
         this.setState({ currentUser: { name: this.state.currentUser.name, color } });
       }
