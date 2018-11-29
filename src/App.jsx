@@ -11,9 +11,10 @@ class App extends Component {
       currentUser: { name: 'Jack', color: '' },
       messages: [],
       socket: {},
-      userCount: 0
+      userCount: 0,
     }
     this.newMessage = this.newMessage.bind(this);
+    this.scrollRef = React.createRef();
   }
 
   newMessage(event) {
@@ -21,7 +22,7 @@ class App extends Component {
       const username = event.currentTarget.elements[0].value;
       const messageInput = event.currentTarget.elements[1].value;
       event.currentTarget.elements[1].value = '';
-      let newMessage = {};  
+      let newMessage = {};
       if (this.state.currentUser.name !== username) {
         newMessage = {
           type: "incomingNotification",
@@ -52,7 +53,7 @@ class App extends Component {
       const response = JSON.parse(event.data);
       const { userCount, color, message } = response;
       console.log(message);
-      if(color) {
+      if (color) {
         this.setState({ currentUser: { name: this.state.currentUser.name, color } });
       }
       this.setState({ userCount });
@@ -65,11 +66,16 @@ class App extends Component {
     console.log('Connected to server');
   }
 
+  componentDidUpdate() {
+    this.scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+
   render() {
     return (
       <div>
         <NavBar userCount={this.state.userCount} />
         <MessageList messages={this.state.messages} />
+        <div ref={this.scrollRef}></div>
         <ChatBar currentUser={this.state.currentUser} newMessage={this.newMessage} />
       </div>
     );
