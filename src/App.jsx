@@ -29,7 +29,7 @@ class App extends Component {
           content: `${this.state.currentUser.name} changed their name to ${username}`
         }
         this.state.socket.send(JSON.stringify(newMessage));
-        this.setState({ currentUser: { name: username } });
+        this.setState({ currentUser: { name: username, color: this.state.currentUser.color } });
         console.log('Message sent to server');
       }
       if (messageInput) {
@@ -51,7 +51,10 @@ class App extends Component {
     socket.onmessage = (event) => {
       const response = JSON.parse(event.data);
       const { userCount, color, message } = response;
-      this.setState({ userCount, currentUser: { name: this.state.currentUser.name, color } });
+      if(color) {
+        this.setState({ currentUser: { name: this.state.currentUser.name, color } });
+      }
+      this.setState({ userCount });
       if (message) {
         const messages = this.state.messages.concat(message);
         this.setState({ messages });

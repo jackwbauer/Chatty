@@ -31,11 +31,11 @@ wss.on('connection', (ws) => {
     const connectedResponse = { userCount: wss.clients.size, color: assignColor() };
     ws.send(JSON.stringify(connectedResponse));
     ws.on('message', (messageJSON) => {
-        const { message, color } = JSON.parse(messageJSON);
+        const message = JSON.parse(messageJSON);
         message.id = uuid();
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-                const response = { userCount: wss.clients.size, message, color };
+                const response = { userCount: wss.clients.size, message };
                 console.log('Sending message to all clients');
                 client.send(JSON.stringify(response));
             }
