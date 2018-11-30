@@ -6,14 +6,14 @@ A minimal and light dev environment for ReactJS.
 ### Usage
 
 Clone the project from git@github.com:jackwbauer/Chatty.git.
-```
+
 
 Install the dependencies and start the server.
-```
+
 npm install
 npm start
 open http://localhost:3000
-```
+
 
 ### Static Files
 
@@ -23,9 +23,9 @@ open http://localhost:3000
 
 This project includes React ESLint configuration.
 
-```
+
 npm run lint
-```
+
 
 ### Dependencies
 
