@@ -24,6 +24,7 @@ class Message extends Component {
 
     render() {
         const { type, username, content } = this.props.message;
+        console.log(content);
         if (type === "incomingMessage") {
             const newContent = this.imageCheck(content);
             return (
@@ -34,7 +35,7 @@ class Message extends Component {
             )
         }
         return (
-            <div className="message system">{content[0].content}</div>
+            <div className="message system">{content}</div>
         )
 
     }

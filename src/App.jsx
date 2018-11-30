@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 import NavBar from './NavBar.jsx';
-import messagesData from '../data.json';
 
 class App extends Component {
   constructor() {
@@ -19,9 +18,16 @@ class App extends Component {
 
   newMessage(event) {
     if (event.key === "Enter") {
+
+      // gets username from username form input element
       const username = event.currentTarget.elements[0].value;
+
+      //gets message from message form input element
       const messageInput = event.currentTarget.elements[1].value;
+
+      //resets message form input element to be empty
       event.currentTarget.elements[1].value = '';
+
       let newMessage = {};
 
       // if user changes their username

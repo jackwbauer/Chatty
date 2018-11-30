@@ -67,7 +67,9 @@ wss.on('connection', (ws) => {
     ws.on('message', (messageJSON) => {
         const message = JSON.parse(messageJSON);
         message.id = uuid();
-        message.content = imageCheck(message.content);
+        if (message.type === 'incomingMessage') {
+            message.content = imageCheck(message.content);
+        }
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
                 const response = { userCount: wss.clients.size, message };
