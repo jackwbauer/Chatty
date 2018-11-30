@@ -5,15 +5,9 @@ class Message extends Component {
         color: this.props.color ? this.props.color : '#000000'
     };
 
-    regexIndexOf = (regex, string) => {
-        var indexOf = string.substring(0).search(regex);
-        return indexOf;
-    }
-
     // break message into array to handle combintations of text and image urls
     imageCheck = (content) => {
         let newContent = [];
-        console.log('content:', content);
         content.forEach((piece) => {
             switch (piece.type) {
                 case 'image':
@@ -30,8 +24,8 @@ class Message extends Component {
 
     render() {
         const { type, username, content } = this.props.message;
-        const newContent = this.imageCheck(content);
         if (type === "incomingMessage") {
+            const newContent = this.imageCheck(content);
             return (
                 <div className="message">
                     <span style={this.usernameColor} className="message-username">{username}</span>
@@ -40,7 +34,7 @@ class Message extends Component {
             )
         }
         return (
-            <div className="message system">{content}</div>
+            <div className="message system">{content[0].content}</div>
         )
 
     }

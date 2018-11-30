@@ -51,6 +51,18 @@ function imageCheck(content) {
 wss.on('connection', (ws) => {
     console.log('Client connected');
     const connectedResponse = { userCount: wss.clients.size, color: assignColor() };
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN && client !== ws) {
+            const message = {
+                type: 'incomingNotification',
+                content: 'A new user has joined the chat.'
+            };
+
+            const response = { userCount: wss.clients.size, message };
+            console.log('Sending message to all clients');
+            client.send(JSON.stringify(response));
+        }
+    })
     ws.send(JSON.stringify(connectedResponse));
     ws.on('message', (messageJSON) => {
         const message = JSON.parse(messageJSON);
