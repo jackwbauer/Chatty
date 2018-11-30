@@ -9,10 +9,11 @@ Chatty is a simple Slack clone.
 ### Getting Started
 
 1. Fork this repository, then clone your fork of this repository.
-2. Install dependencies using the `npm install` command.
-3. Start the web server in `./chatty_server` using the `npm start` command.
-4. Start the app in the root project folder using the `npm start` command.
-5. Go to <http://localhost:3000/> in your browser.
+2. Install client dependencies using the `npm install` command.
+3. Go into `./chatty_server` and install the server dependencies using the `npm install` command.
+4. In `./chatty_server`, start the server using the `npm start` command.
+5. Return to the project's root folder and start the application using the `npm start` command.
+6. Go to <http://localhost:3000/> in your browser.
 
 ### Dependencies
 
@@ -20,3 +21,6 @@ Chatty is a simple Slack clone.
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* UUID
+* Express
+* WS
