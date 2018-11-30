@@ -1,31 +1,18 @@
-React Boilerplate
-=====================
+# Chatty
 
-A minimal and light dev environment for ReactJS.
+Chatty is a simple Slack clone.
 
-### Usage
-
-Clone the project from git@github.com:jackwbauer/Chatty.git.
-
-
-Install the dependencies and start the server.
-
-npm install
-npm start
-open http://localhost:3000
-
-
-### Static Files
+### Final Product
 
 !["Screenshot of Chatty"](https://github.com/jackwbauer/Chatty/blob/master/build/Chatty.png)
 
-### Linting
+### Getting Started
 
-This project includes React ESLint configuration.
-
-
-npm run lint
-
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command.
+3. Start the web server in `./chatty_server` using the `npm start` command.
+4. Start the app in the root project folder using the `npm start` command.
+5. Go to <http://localhost:3000/> in your browser.
 
 ### Dependencies
 
